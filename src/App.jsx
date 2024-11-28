@@ -1,22 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import initialMatchesData from './data/dump.json';
 import './styles/main.css';
 
 function App() {
-  const [matches, setMatches] = useState(() => {
-    const savedMatches = localStorage.getItem('matches');
-    if (savedMatches) {
-      return JSON.parse(savedMatches);
-    }
-    return initialMatchesData.map(match => ({
-      ...match,
-      HomeTeamScore: null,
-      AwayTeamScore: null
-    }));
-  });
+  const [matches, setMatches] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem('matches', JSON.stringify(matches));
+    const loadMatches = async () => {
+      try {
+        // First check localStorage
+        const savedMatches = localStorage.getItem('matches');
+        if (savedMatches) {
+          setMatches(JSON.parse(savedMatches));
+          setIsLoading(false);
+          return;
+        }
+        console.log(`${process.env.PUBLIC_URL}/data/dump.json`)
+        console.log(response)
+        // If no saved matches, load from public folder
+        const response = await fetch(`${process.env.PUBLIC_URL}/data/dump.json`);
+
+
+        if (!response.ok) {
+          throw new Error('Failed to load matches data');
+        }
+        const initialMatchesData = await response.json();
+        const matchesWithScores = initialMatchesData.map(match => ({
+          ...match,
+          HomeTeamScore: null,
+          AwayTeamScore: null
+        }));
+        setMatches(matchesWithScores);
+      } catch (err) {
+        setError(err.message);
+        console.error('Error loading matches:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadMatches();
+  }, []);
+
+  useEffect(() => {
+    if (matches.length > 0) {
+      localStorage.setItem('matches', JSON.stringify(matches));
+    }
   }, [matches]);
 
   const calculateStandings = () => {
@@ -143,6 +173,14 @@ function App() {
       setMatches(resetMatches);
     }
   };
+
+  if (isLoading) {
+    return <div className="loading">Loading matches...</div>;
+  }
+
+  if (error) {
+    return <div className="error">Error: {error}</div>;
+  }
 
   const standings = calculateStandings();
 
