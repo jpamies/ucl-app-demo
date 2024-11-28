@@ -1,0 +1,244 @@
+{
+  "groups": {
+    "A": {
+      "teams": [
+        {"id": "juventus", "name": "Juventus", "country": "ITA"},
+        {"id": "psv", "name": "PSV", "country": "NED"},
+        {"id": "bayern", "name": "Bayern München", "country": "GER"},
+        {"id": "dinamo", "name": "GNK Dinamo", "country": "CRO"}
+      ],
+      "matches": [
+        {
+          "id": "M1",
+          "date": "2024-09-17 16:45:00Z",
+          "homeTeam": "juventus",
+          "awayTeam": "psv",
+          "homeScore": 3,
+          "awayScore": 1,
+          "isPlayed": true,
+          "location": "Juventus Stadium"
+        },
+        {
+          "id": "M3",
+          "date": "2024-09-17 19:00:00Z",
+          "homeTeam": "bayern",
+          "awayTeam": "dinamo",
+          "homeScore": 9,
+          "awayScore": 2,
+          "isPlayed": true,
+          "location": "Fußball Arena München"
+        }
+      ]
+    },
+    "B": {
+      "teams": [
+        {"id": "young_boys", "name": "Young Boys", "country": "SUI"},
+        {"id": "aston_villa", "name": "Aston Villa", "country": "ENG"},
+        {"id": "milan", "name": "Milan", "country": "ITA"},
+        {"id": "liverpool", "name": "Liverpool", "country": "ENG"}
+      ],
+      "matches": [
+        {
+          "id": "M2",
+          "date": "2024-09-17 16:45:00Z",
+          "homeTeam": "young_boys",
+          "awayTeam": "aston_villa",
+          "homeScore": 0,
+          "awayScore": 3,
+          "isPlayed": true,
+          "location": "Stadion Wankdorf"
+        },
+        {
+          "id": "M4",
+          "date": "2024-09-17 19:00:00Z",
+          "homeTeam": "milan",
+          "awayTeam": "liverpool",
+          "homeScore": 1,
+          "awayScore": 3,
+          "isPlayed": true,
+          "location": "Stadio San Siro"
+        }
+      ]
+    },
+    "C": {
+      "teams": [
+        {"id": "real_madrid", "name": "Real Madrid", "country": "ESP"},
+        {"id": "stuttgart", "name": "Stuttgart", "country": "GER"},
+        {"id": "sporting", "name": "Sporting CP", "country": "POR"},
+        {"id": "lille", "name": "Lille", "country": "FRA"}
+      ],
+      "matches": [
+        {
+          "id": "M5",
+          "date": "2024-09-17 19:00:00Z",
+          "homeTeam": "real_madrid",
+          "awayTeam": "stuttgart",
+          "homeScore": 3,
+          "awayScore": 1,
+          "isPlayed": true,
+          "location": "Estadio Santiago Bernabéu"
+        },
+        {
+          "id": "M6",
+          "date": "2024-09-17 19:00:00Z",
+          "homeTeam": "sporting",
+          "awayTeam": "lille",
+          "homeScore": 2,
+          "awayScore": 0,
+          "isPlayed": true,
+          "location": "Estádio José Alvalade"
+        }
+      ]
+    },
+    "D": {
+      "teams": [
+        {"id": "bologna", "name": "Bologna", "country": "ITA"},
+        {"id": "shakhtar", "name": "Shakhtar", "country": "UKR"},
+        {"id": "sparta", "name": "Sparta Praha", "country": "CZE"},
+        {"id": "salzburg", "name": "Salzburg", "country": "AUT"}
+      ],
+      "matches": [
+        {
+          "id": "M7",
+          "date": "2024-09-18 16:45:00Z",
+          "homeTeam": "bologna",
+          "awayTeam": "shakhtar",
+          "homeScore": 0,
+          "awayScore": 0,
+          "isPlayed": true,
+          "location": "Stadio Renato Dall'Ara"
+        },
+        {
+          "id": "M8",
+          "date": "2024-09-18 16:45:00Z",
+          "homeTeam": "sparta",
+          "awayTeam": "salzburg",
+          "homeScore": 3,
+          "awayScore": 0,
+          "isPlayed": true,
+          "location": "Stadion Letná"
+        }
+      ]
+    },
+    "E": {
+      "teams": [
+        {"id": "club_brugge", "name": "Club Brugge", "country": "BEL"},
+        {"id": "dortmund", "name": "B. Dortmund", "country": "GER"},
+        {"id": "celtic", "name": "Celtic", "country": "SCO"},
+        {"id": "bratislava", "name": "S. Bratislava", "country": "SVK"}
+      ],
+      "matches": [
+        {
+          "id": "M9",
+          "date": "2024-09-18 19:00:00Z",
+          "homeTeam": "club_brugge",
+          "awayTeam": "dortmund",
+          "homeScore": 0,
+          "awayScore": 3,
+          "isPlayed": true,
+          "location": "Jan Breydelstadion"
+        },
+        {
+          "id": "M10",
+          "date": "2024-09-18 19:00:00Z",
+          "homeTeam": "celtic",
+          "awayTeam": "bratislava",
+          "homeScore": 5,
+          "awayScore": 1,
+          "isPlayed": true,
+          "location": "Celtic Park"
+        }
+      ]
+    },
+    "F": {
+      "teams": [
+        {"id": "man_city", "name": "Man City", "country": "ENG"},
+        {"id": "inter", "name": "Inter", "country": "ITA"},
+        {"id": "paris", "name": "Paris", "country": "FRA"},
+        {"id": "girona", "name": "Girona", "country": "ESP"}
+      ],
+      "matches": [
+        {
+          "id": "M11",
+          "date": "2024-09-18 19:00:00Z",
+          "homeTeam": "man_city",
+          "awayTeam": "inter",
+          "homeScore": 0,
+          "awayScore": 0,
+          "isPlayed": true,
+          "location": "City of Manchester Stadium"
+        },
+        {
+          "id": "M12",
+          "date": "2024-09-18 19:00:00Z",
+          "homeTeam": "paris",
+          "awayTeam": "girona",
+          "homeScore": 1,
+          "awayScore": 0,
+          "isPlayed": true,
+          "location": "Parc des Princes"
+        }
+      ]
+    },
+    "G": {
+      "teams": [
+        {"id": "crvena", "name": "Crvena Zvezda", "country": "SRB"},
+        {"id": "benfica", "name": "Benfica", "country": "POR"},
+        {"id": "feyenoord", "name": "Feyenoord", "country": "NED"},
+        {"id": "leverkusen", "name": "Leverkusen", "country": "GER"}
+      ],
+      "matches": [
+        {
+          "id": "M13",
+          "date": "2024-09-19 16:45:00Z",
+          "homeTeam": "crvena",
+          "awayTeam": "benfica",
+          "homeScore": 1,
+          "awayScore": 2,
+          "isPlayed": true,
+          "location": "Stadion Rajko Mitic"
+        },
+        {
+          "id": "M14",
+          "date": "2024-09-19 16:45:00Z",
+          "homeTeam": "feyenoord",
+          "awayTeam": "leverkusen",
+          "homeScore": 0,
+          "awayScore": 4,
+          "isPlayed": true,
+          "location": "Stadion Feijenoord 'De Kuip'"
+        }
+      ]
+    },
+    "H": {
+      "teams": [
+        {"id": "atalanta", "name": "Atalanta", "country": "ITA"},
+        {"id": "arsenal", "name": "Arsenal", "country": "ENG"},
+        {"id": "atletico", "name": "Atleti", "country": "ESP"},
+        {"id": "leipzig", "name": "Leipzig", "country": "GER"}
+      ],
+      "matches": [
+        {
+          "id": "M15",
+          "date": "2024-09-19 19:00:00Z",
+          "homeTeam": "atalanta",
+          "awayTeam": "arsenal",
+          "homeScore": 0,
+          "awayScore": 0,
+          "isPlayed": true,
+          "location": "Stadio di Bergamo"
+        },
+        {
+          "id": "M16",
+          "date": "2024-09-19 19:00:00Z",
+          "homeTeam": "atletico",
+          "awayTeam": "leipzig",
+          "homeScore": 2,
+          "awayScore": 1,
+          "isPlayed": true,
+          "location": "Estadio Metropolitano"
+        }
+      ]
+    }
+  }
+}
