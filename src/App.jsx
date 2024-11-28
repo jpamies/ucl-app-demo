@@ -11,8 +11,8 @@ function App() {
     // Initialize matches with null scores if they don't exist
     return initialMatchesData.map(match => ({
       ...match,
-      HomeTeamScore: match.HomeTeamScore === null ? undefined : match.HomeTeamScore,
-      AwayTeamScore: match.AwayTeamScore === null ? undefined : match.AwayTeamScore
+      HomeTeamScore: null,
+      AwayTeamScore: null
     }));
   });
   const [selectedMatch, setSelectedMatch] = useState(null);
@@ -107,6 +107,7 @@ function App() {
       setMatches(updatedMatches);
       setSelectedMatch(null);
       setNewScore({ home: '', away: '' });
+      localStorage.setItem('matches', JSON.stringify(updatedMatches));
     }
   };
 
@@ -114,12 +115,13 @@ function App() {
     if (window.confirm('Are you sure you want to reset all scores?')) {
       const resetMatches = matches.map(match => ({
         ...match,
-        HomeTeamScore: undefined,
-        AwayTeamScore: undefined
+        HomeTeamScore: null,
+        AwayTeamScore: null
       }));
       setMatches(resetMatches);
       setSelectedMatch(null);
       setNewScore({ home: '', away: '' });
+      localStorage.setItem('matches', JSON.stringify(resetMatches));
     }
   };
 
@@ -212,17 +214,19 @@ function App() {
           {matches.map(match => (
             <div 
               key={match.MatchNumber} 
-              className={`match-item ${match.HomeTeamScore === undefined || match.HomeTeamScore === null ? 'pending' : ''}`}
+              className={`match-item ${!match.HomeTeamScore && !match.AwayTeamScore ? 'pending' : ''}`}
               onClick={() => {
-                if (match.HomeTeamScore === undefined || match.HomeTeamScore === null) {
+                // Allow editing for matches without scores or with null/undefined scores
+                if (!match.HomeTeamScore && !match.AwayTeamScore) {
                   setSelectedMatch(match);
                   setNewScore({ home: '', away: '' });
                 }
               }}
+              style={{ cursor: !match.HomeTeamScore && !match.AwayTeamScore ? 'pointer' : 'default' }}
             >
               <span className="team home">{match.HomeTeam}</span>
               <span className="score">
-                {match.HomeTeamScore !== undefined && match.HomeTeamScore !== null ? 
+                {(match.HomeTeamScore || match.HomeTeamScore === 0) && (match.AwayTeamScore || match.AwayTeamScore === 0) ? 
                   `${match.HomeTeamScore} - ${match.AwayTeamScore}` : 
                   'Click to add score'}
               </span>
