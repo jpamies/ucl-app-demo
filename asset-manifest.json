@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/ucl-app-demo/static/css/main.f5699d10.css",
+    "main.js": "/ucl-app-demo/static/js/main.ed463083.js",
+    "index.html": "/ucl-app-demo/index.html",
+    "main.f5699d10.css.map": "/ucl-app-demo/static/css/main.f5699d10.css.map",
+    "main.ed463083.js.map": "/ucl-app-demo/static/js/main.ed463083.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f5699d10.css",
+    "static/js/main.ed463083.js"
+  ]
+}
