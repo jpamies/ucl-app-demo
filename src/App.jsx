@@ -8,15 +8,12 @@ function App() {
     if (savedMatches) {
       return JSON.parse(savedMatches);
     }
-    // Initialize matches with null scores if they don't exist
     return initialMatchesData.map(match => ({
       ...match,
       HomeTeamScore: null,
       AwayTeamScore: null
     }));
   });
-  const [selectedMatch, setSelectedMatch] = useState(null);
-  const [newScore, setNewScore] = useState({ home: '', away: '' });
 
   useEffect(() => {
     localStorage.setItem('matches', JSON.stringify(matches));
@@ -51,7 +48,6 @@ function App() {
         });
       }
 
-      // Only count matches with valid scores (not null or undefined)
       if (match.HomeTeamScore !== null && match.HomeTeamScore !== undefined &&
           match.AwayTeamScore !== null && match.AwayTeamScore !== undefined) {
         const homeTeam = teamsMap.get(match.HomeTeam);
@@ -91,24 +87,50 @@ function App() {
     });
   };
 
-  const handleScoreSubmit = (e) => {
-    e.preventDefault();
-    if (selectedMatch && newScore.home !== '' && newScore.away !== '') {
+  const handleScoreChange = (matchNumber, team, value) => {
+    const numValue = parseInt(value);
+    if (!isNaN(numValue) && numValue >= 0) {
       const updatedMatches = matches.map(match => {
-        if (match.MatchNumber === selectedMatch.MatchNumber) {
+        if (match.MatchNumber === matchNumber) {
           return {
             ...match,
-            HomeTeamScore: parseInt(newScore.home),
-            AwayTeamScore: parseInt(newScore.away)
+            [team === 'home' ? 'HomeTeamScore' : 'AwayTeamScore']: numValue
           };
         }
         return match;
       });
       setMatches(updatedMatches);
-      setSelectedMatch(null);
-      setNewScore({ home: '', away: '' });
-      localStorage.setItem('matches', JSON.stringify(updatedMatches));
     }
+  };
+
+  const incrementScore = (matchNumber, team) => {
+    const updatedMatches = matches.map(match => {
+      if (match.MatchNumber === matchNumber) {
+        const currentScore = team === 'home' ? match.HomeTeamScore : match.AwayTeamScore;
+        const newScore = (currentScore === null || currentScore === undefined) ? 1 : currentScore + 1;
+        return {
+          ...match,
+          [team === 'home' ? 'HomeTeamScore' : 'AwayTeamScore']: newScore
+        };
+      }
+      return match;
+    });
+    setMatches(updatedMatches);
+  };
+
+  const decrementScore = (matchNumber, team) => {
+    const updatedMatches = matches.map(match => {
+      if (match.MatchNumber === matchNumber) {
+        const currentScore = team === 'home' ? match.HomeTeamScore : match.AwayTeamScore;
+        const newScore = (currentScore === null || currentScore === undefined || currentScore === 0) ? 0 : currentScore - 1;
+        return {
+          ...match,
+          [team === 'home' ? 'HomeTeamScore' : 'AwayTeamScore']: newScore
+        };
+      }
+      return match;
+    });
+    setMatches(updatedMatches);
   };
 
   const resetScores = () => {
@@ -119,9 +141,6 @@ function App() {
         AwayTeamScore: null
       }));
       setMatches(resetMatches);
-      setSelectedMatch(null);
-      setNewScore({ home: '', away: '' });
-      localStorage.setItem('matches', JSON.stringify(resetMatches));
     }
   };
 
@@ -180,56 +199,34 @@ function App() {
           <h2>Matches</h2>
           <button onClick={resetScores} className="reset-button">Reset All Scores</button>
         </div>
-        
-        {selectedMatch && (
-          <form onSubmit={handleScoreSubmit} className="score-form">
-            <h3>Enter Score</h3>
-            <div className="score-inputs">
-              <span className="team home">{selectedMatch.HomeTeam}</span>
-              <input
-                type="number"
-                min="0"
-                value={newScore.home}
-                onChange={(e) => setNewScore({ ...newScore, home: e.target.value })}
-                required
-              />
-              <span>-</span>
-              <input
-                type="number"
-                min="0"
-                value={newScore.away}
-                onChange={(e) => setNewScore({ ...newScore, away: e.target.value })}
-                required
-              />
-              <span className="team away">{selectedMatch.AwayTeam}</span>
-            </div>
-            <div className="form-buttons">
-              <button type="submit">Save</button>
-              <button type="button" onClick={() => setSelectedMatch(null)}>Cancel</button>
-            </div>
-          </form>
-        )}
 
         <div className="matches-list">
           {matches.map(match => (
-            <div 
-              key={match.MatchNumber} 
-              className={`match-item ${!match.HomeTeamScore && !match.AwayTeamScore ? 'pending' : ''}`}
-              onClick={() => {
-                // Allow editing for matches without scores or with null/undefined scores
-                if (!match.HomeTeamScore && !match.AwayTeamScore) {
-                  setSelectedMatch(match);
-                  setNewScore({ home: '', away: '' });
-                }
-              }}
-              style={{ cursor: !match.HomeTeamScore && !match.AwayTeamScore ? 'pointer' : 'default' }}
-            >
+            <div key={match.MatchNumber} className="match-item">
               <span className="team home">{match.HomeTeam}</span>
-              <span className="score">
-                {(match.HomeTeamScore || match.HomeTeamScore === 0) && (match.AwayTeamScore || match.AwayTeamScore === 0) ? 
-                  `${match.HomeTeamScore} - ${match.AwayTeamScore}` : 
-                  'Click to add score'}
-              </span>
+              <div className="score-container">
+                <div className="score-spinner">
+                  <button type="button" onClick={() => decrementScore(match.MatchNumber, 'home')}>-</button>
+                  <input
+                    type="number"
+                    min="0"
+                    value={match.HomeTeamScore ?? ''}
+                    onChange={(e) => handleScoreChange(match.MatchNumber, 'home', e.target.value)}
+                  />
+                  <button type="button" onClick={() => incrementScore(match.MatchNumber, 'home')}>+</button>
+                </div>
+                <span className="score-separator">-</span>
+                <div className="score-spinner">
+                  <button type="button" onClick={() => decrementScore(match.MatchNumber, 'away')}>-</button>
+                  <input
+                    type="number"
+                    min="0"
+                    value={match.AwayTeamScore ?? ''}
+                    onChange={(e) => handleScoreChange(match.MatchNumber, 'away', e.target.value)}
+                  />
+                  <button type="button" onClick={() => incrementScore(match.MatchNumber, 'away')}>+</button>
+                </div>
+              </div>
               <span className="team away">{match.AwayTeam}</span>
               <span className="match-date">
                 {new Date(match.DateUtc).toLocaleDateString()}
