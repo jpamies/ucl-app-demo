@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/ucl-app-demo/static/css/main.44d4d9ea.css",
-    "main.js": "/ucl-app-demo/static/js/main.99449205.js",
+    "main.css": "/ucl-app-demo/static/css/main.c2674834.css",
+    "main.js": "/ucl-app-demo/static/js/main.a3aa2502.js",
     "index.html": "/ucl-app-demo/index.html",
-    "main.44d4d9ea.css.map": "/ucl-app-demo/static/css/main.44d4d9ea.css.map",
-    "main.99449205.js.map": "/ucl-app-demo/static/js/main.99449205.js.map"
+    "main.c2674834.css.map": "/ucl-app-demo/static/css/main.c2674834.css.map",
+    "main.a3aa2502.js.map": "/ucl-app-demo/static/js/main.a3aa2502.js.map"
   },
   "entrypoints": [
-    "static/css/main.44d4d9ea.css",
-    "static/js/main.99449205.js"
+    "static/css/main.c2674834.css",
+    "static/js/main.a3aa2502.js"
   ]
 }
