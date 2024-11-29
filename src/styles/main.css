@@ -4,6 +4,11 @@
     'Helvetica Neue', sans-serif;
   --font-family-monospace: ui-monospace, SFMono-Regular, 'SF Mono', Menlo,
     Consolas, 'Liberation Mono', monospace;
+  --color-primary: #0056b3;
+  --color-border: #dee2e6;
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #6b7280;
+  --color-background: #f5f5f5;
 }
 
 * {
@@ -16,8 +21,8 @@ body {
   font-family: var(--font-family-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #1a1a1a;
-  background-color: #f5f5f5;
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
   line-height: 1.5;
 }
 
@@ -27,32 +32,62 @@ body {
   padding: 2rem;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
-  line-height: 1.25;
-}
-
 h1 {
   text-align: center;
   margin-bottom: 2rem;
   color: #2c3e50;
   font-size: 2rem;
+  font-weight: 600;
 }
 
-h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--color-border);
+  padding: 0 1rem;
 }
 
-h3 {
-  font-size: 1.25rem;
+.tab-button {
+  padding: 1rem 1.5rem;
+  border: none;
+  background: none;
+  font-family: var(--font-family-base);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.tab-button:hover {
+  color: var(--color-primary);
+}
+
+.tab-button.active {
+  color: var(--color-primary);
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-primary);
+}
+
+.tab-content {
+  padding: 1rem;
 }
 
 .loading {
   text-align: center;
   padding: 2rem;
   font-size: 1.2rem;
-  color: #666;
+  color: var(--color-text-secondary);
 }
 
 .error {
@@ -60,31 +95,16 @@ h3 {
   padding: 2rem;
   color: #dc3545;
   background-color: #f8d7da;
-  border-radius: 4px;
+  border-radius: 8px;
   margin: 1rem 0;
 }
 
-.matches-container {
-  margin-top: 2rem;
-}
-
-.matches-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.reset-button {
-  padding: 0.5rem 1rem;
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.reset-button:hover {
-  background-color: #c82333;
+.knockout-phase {
+  text-align: center;
+  padding: 3rem;
+  background-color: #fff;
+  border-radius: 8px;
+  margin: 2rem auto;
+  max-width: 800px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }

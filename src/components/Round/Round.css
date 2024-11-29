@@ -1,7 +1,8 @@
 .round-group {
-    margin-bottom: 1rem;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
+    background-color: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    overflow: hidden;
   }
   
   .round-group.completed {
@@ -15,7 +16,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color 0.2s ease;
   }
   
   .round-header:hover {
@@ -30,25 +32,23 @@
   
   .round-header h3 {
     margin: 0;
-    font-size: 1.1rem;
-    min-width: 100px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #495057;
   }
   
   .round-dates {
-    color: #6c757d;
-    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    font-size: 0.8125rem;
   }
   
   .expand-icon {
     font-size: 0.8rem;
-    color: #6c757d;
+    color: var(--color-text-secondary);
+    transition: transform 0.2s ease;
   }
   
   .round-matches {
     padding: 1rem;
-  }
-  
-  .round-group.completed .round-header {
-    background-color: #e9ecef;
   }
   
