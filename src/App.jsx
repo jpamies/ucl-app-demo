@@ -5,36 +5,88 @@ function App() {
   const [matches, setMatches] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [expandedRounds, setExpandedRounds] = useState(new Set());
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
+
+  const getRoundDates = (roundMatches) => {
+    const dates = roundMatches.map(match => new Date(match.DateUtc));
+    const startDate = new Date(Math.min(...dates));
+    const endDate = new Date(Math.max(...dates));
+    return `${formatDate(startDate)} - ${formatDate(endDate)}`;
+  };
+
+  const loadMatchesFromJson = async () => {
+    console.log('Attempting to fetch from:', `${process.env.PUBLIC_URL}/data/dump.json`);
+    try {
+      const response = await fetch(`${process.env.PUBLIC_URL}/data/dump.json`);
+      console.log('Response status:', response.status);
+      if (!response.ok) {
+        throw new Error('Failed to load matches data');
+      }
+      const initialMatchesData = await response.json();
+      console.log('Data loaded successfully:', initialMatchesData);
+      return initialMatchesData.map(match => {
+        // Convert scores to numbers, handling null, undefined, and empty string cases
+        const homeScore = match.HomeTeamScore === null || match.HomeTeamScore === undefined || match.HomeTeamScore === '' 
+          ? null 
+          : Number(match.HomeTeamScore);
+        const awayScore = match.AwayTeamScore === null || match.AwayTeamScore === undefined || match.AwayTeamScore === '' 
+          ? null 
+          : Number(match.AwayTeamScore);
+
+        return {
+          ...match,
+          // A match is locked if both scores are numbers (including 0)
+          isLocked: homeScore !== null && awayScore !== null,
+          // Set the converted scores
+          HomeTeamScore: homeScore,
+          AwayTeamScore: awayScore
+        };
+      });
+    } catch (error) {
+      console.error('Error in loadMatchesFromJson:', error);
+      throw error;
+    }
+  };
+
+  const isRoundCompleted = (roundMatches) => {
+    return roundMatches.every(match => match.isLocked);
+  };
 
   useEffect(() => {
     const loadMatches = async () => {
       try {
-        // First check localStorage
+        console.log('Starting to load matches');
+        const baseMatches = await loadMatchesFromJson();
+        
+        // Get saved matches from localStorage
         const savedMatches = localStorage.getItem('matches');
         if (savedMatches) {
-          setMatches(JSON.parse(savedMatches));
-          setIsLoading(false);
-          return;
+          const parsedSavedMatches = JSON.parse(savedMatches);
+          
+          // Merge saved matches with base matches, keeping locked matches from base
+          const mergedMatches = baseMatches.map(baseMatch => {
+            const savedMatch = parsedSavedMatches.find(m => m.MatchNumber === baseMatch.MatchNumber);
+            if (baseMatch.isLocked) {
+              return baseMatch; // Keep locked match data from dump.json
+            }
+            return savedMatch || baseMatch; // Use saved match data if it exists, otherwise use base
+          });
+          
+          setMatches(mergedMatches);
+        } else {
+          setMatches(baseMatches);
         }
-        console.log(`${process.env.PUBLIC_URL}/data/dump.json`)
-        console.log(response)
-        // If no saved matches, load from public folder
-        const response = await fetch(`${process.env.PUBLIC_URL}/data/dump.json`);
-
-
-        if (!response.ok) {
-          throw new Error('Failed to load matches data');
-        }
-        const initialMatchesData = await response.json();
-        const matchesWithScores = initialMatchesData.map(match => ({
-          ...match,
-          HomeTeamScore: null,
-          AwayTeamScore: null
-        }));
-        setMatches(matchesWithScores);
       } catch (err) {
+        console.error('Error in loadMatches:', err);
         setError(err.message);
-        console.error('Error loading matches:', err);
       } finally {
         setIsLoading(false);
       }
@@ -45,9 +97,56 @@ function App() {
 
   useEffect(() => {
     if (matches.length > 0) {
-      localStorage.setItem('matches', JSON.stringify(matches));
+      // Only save unlocked matches with scores to localStorage
+      const matchesToSave = matches.map(match => {
+        if (match.isLocked) {
+          return null; // Don't save locked matches
+        }
+        if (match.HomeTeamScore !== null || match.AwayTeamScore !== null) {
+          return match;
+        }
+        return null;
+      }).filter(Boolean); // Remove null entries
+
+      if (matchesToSave.length > 0) {
+        localStorage.setItem('matches', JSON.stringify(matchesToSave));
+      }
     }
   }, [matches]);
+
+  useEffect(() => {
+    if (matches.length > 0) {
+      // Group matches by round
+      const roundsMap = new Map();
+      matches.forEach(match => {
+        if (!roundsMap.has(match.RoundNumber)) {
+          roundsMap.set(match.RoundNumber, []);
+        }
+        roundsMap.get(match.RoundNumber).push(match);
+      });
+
+      // Set initial expanded state for incomplete rounds
+      const newExpandedRounds = new Set();
+      roundsMap.forEach((roundMatches, roundNumber) => {
+        if (!isRoundCompleted(roundMatches)) {
+          newExpandedRounds.add(roundNumber);
+        }
+      });
+      setExpandedRounds(newExpandedRounds);
+    }
+  }, [matches]); // Only run when matches change
+
+  const toggleRound = (roundNumber) => {
+    setExpandedRounds(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(roundNumber)) {
+        newSet.delete(roundNumber);
+      } else {
+        newSet.add(roundNumber);
+      }
+      return newSet;
+    });
+  };
 
   const calculateStandings = () => {
     const teamsMap = new Map();
@@ -78,8 +177,8 @@ function App() {
         });
       }
 
-      if (match.HomeTeamScore !== null && match.HomeTeamScore !== undefined &&
-          match.AwayTeamScore !== null && match.AwayTeamScore !== undefined) {
+      // Check if both scores are numbers (including 0)
+      if (typeof match.HomeTeamScore === 'number' && typeof match.AwayTeamScore === 'number') {
         const homeTeam = teamsMap.get(match.HomeTeam);
         const awayTeam = teamsMap.get(match.AwayTeam);
 
@@ -121,7 +220,7 @@ function App() {
     const numValue = parseInt(value);
     if (!isNaN(numValue) && numValue >= 0) {
       const updatedMatches = matches.map(match => {
-        if (match.MatchNumber === matchNumber) {
+        if (match.MatchNumber === matchNumber && !match.isLocked) {
           return {
             ...match,
             [team === 'home' ? 'HomeTeamScore' : 'AwayTeamScore']: numValue
@@ -135,7 +234,7 @@ function App() {
 
   const incrementScore = (matchNumber, team) => {
     const updatedMatches = matches.map(match => {
-      if (match.MatchNumber === matchNumber) {
+      if (match.MatchNumber === matchNumber && !match.isLocked) {
         const currentScore = team === 'home' ? match.HomeTeamScore : match.AwayTeamScore;
         const newScore = (currentScore === null || currentScore === undefined) ? 1 : currentScore + 1;
         return {
@@ -150,7 +249,7 @@ function App() {
 
   const decrementScore = (matchNumber, team) => {
     const updatedMatches = matches.map(match => {
-      if (match.MatchNumber === matchNumber) {
+      if (match.MatchNumber === matchNumber && !match.isLocked) {
         const currentScore = team === 'home' ? match.HomeTeamScore : match.AwayTeamScore;
         const newScore = (currentScore === null || currentScore === undefined || currentScore === 0) ? 0 : currentScore - 1;
         return {
@@ -163,14 +262,25 @@ function App() {
     setMatches(updatedMatches);
   };
 
-  const resetScores = () => {
-    if (window.confirm('Are you sure you want to reset all scores?')) {
-      const resetMatches = matches.map(match => ({
-        ...match,
-        HomeTeamScore: null,
-        AwayTeamScore: null
-      }));
-      setMatches(resetMatches);
+  const resetScores = async () => {
+    if (window.confirm('Are you sure you want to reset all scores? Locked matches will not be affected.')) {
+      try {
+        // Clear localStorage
+        localStorage.clear();
+        
+        // Set loading state to true while resetting
+        setIsLoading(true);
+        
+        // Reload data from dump.json
+        const matchesWithScores = await loadMatchesFromJson();
+        setMatches(matchesWithScores);
+        setIsLoading(false);
+        
+      } catch (err) {
+        setError(err.message);
+        console.error('Error reloading matches:', err);
+        setIsLoading(false);
+      }
     }
   };
 
@@ -239,38 +349,82 @@ function App() {
         </div>
 
         <div className="matches-list">
-          {matches.map(match => (
-            <div key={match.MatchNumber} className="match-item">
-              <span className="team home">{match.HomeTeam}</span>
-              <div className="score-container">
-                <div className="score-spinner">
-                  <button type="button" onClick={() => decrementScore(match.MatchNumber, 'home')}>-</button>
-                  <input
-                    type="number"
-                    min="0"
-                    value={match.HomeTeamScore ?? ''}
-                    onChange={(e) => handleScoreChange(match.MatchNumber, 'home', e.target.value)}
-                  />
-                  <button type="button" onClick={() => incrementScore(match.MatchNumber, 'home')}>+</button>
+          {Array.from(new Set(matches.map(m => m.RoundNumber))).sort((a, b) => a - b).map(roundNumber => {
+            const roundMatches = matches.filter(m => m.RoundNumber === roundNumber);
+            const isCompleted = isRoundCompleted(roundMatches);
+            const isExpanded = expandedRounds.has(roundNumber);
+            const dateRange = getRoundDates(roundMatches);
+
+            return (
+              <div key={roundNumber} className={`round-group ${isCompleted ? 'completed' : ''}`}>
+                <div 
+                  className="round-header" 
+                  onClick={() => toggleRound(roundNumber)}
+                >
+                  <div className="round-info">
+                    <h3>Round {roundNumber}</h3>
+                    <span className="round-dates">{dateRange}</span>
+                  </div>
+                  <span className="expand-icon">{isExpanded ? '▼' : '▶'}</span>
                 </div>
-                <span className="score-separator">-</span>
-                <div className="score-spinner">
-                  <button type="button" onClick={() => decrementScore(match.MatchNumber, 'away')}>-</button>
-                  <input
-                    type="number"
-                    min="0"
-                    value={match.AwayTeamScore ?? ''}
-                    onChange={(e) => handleScoreChange(match.MatchNumber, 'away', e.target.value)}
-                  />
-                  <button type="button" onClick={() => incrementScore(match.MatchNumber, 'away')}>+</button>
-                </div>
+                
+                {isExpanded && (
+                  <div className="round-matches">
+                    {roundMatches.map(match => (
+                      <div key={match.MatchNumber} className={`match-item ${match.isLocked ? 'locked' : ''}`}>
+                        <span className="team home">{match.HomeTeam}</span>
+                        <div className="score-container">
+                          <div className="score-spinner">
+                            <button 
+                              type="button" 
+                              onClick={() => decrementScore(match.MatchNumber, 'home')}
+                              disabled={match.isLocked}
+                            >-</button>
+                            <input
+                              type="number"
+                              min="0"
+                              value={match.HomeTeamScore !== null ? match.HomeTeamScore : ''}
+                              onChange={(e) => handleScoreChange(match.MatchNumber, 'home', e.target.value)}
+                              disabled={match.isLocked}
+                            />
+                            <button 
+                              type="button" 
+                              onClick={() => incrementScore(match.MatchNumber, 'home')}
+                              disabled={match.isLocked}
+                            >+</button>
+                          </div>
+                          <span className="score-separator">-</span>
+                          <div className="score-spinner">
+                            <button 
+                              type="button" 
+                              onClick={() => decrementScore(match.MatchNumber, 'away')}
+                              disabled={match.isLocked}
+                            >-</button>
+                            <input
+                              type="number"
+                              min="0"
+                              value={match.AwayTeamScore !== null ? match.AwayTeamScore : ''}
+                              onChange={(e) => handleScoreChange(match.MatchNumber, 'away', e.target.value)}
+                              disabled={match.isLocked}
+                            />
+                            <button 
+                              type="button" 
+                              onClick={() => incrementScore(match.MatchNumber, 'away')}
+                              disabled={match.isLocked}
+                            >+</button>
+                          </div>
+                        </div>
+                        <span className="team away">{match.AwayTeam}</span>
+                        <span className="match-date">
+                          {new Date(match.DateUtc).toLocaleDateString()}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-              <span className="team away">{match.AwayTeam}</span>
-              <span className="match-date">
-                {new Date(match.DateUtc).toLocaleDateString()}
-              </span>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
