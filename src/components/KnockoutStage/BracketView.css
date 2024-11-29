@@ -1,128 +1,155 @@
 /* src/components/KnockoutStage/BracketView.css */
-.bracket-container {
+.bracket {
     display: flex;
-    gap: 2rem;
-    padding: 2rem;
+    justify-content: space-between;
+    padding: 20px;
     overflow-x: auto;
+    min-height: 800px;
+    background: #f8f9fa;
   }
   
   .bracket-round {
-    min-width: 300px;
-  }
-  
-  .round-title {
-    text-align: center;
-    margin-bottom: 1rem;
-    color: #2c3e50;
-    font-size: 1.25rem;
-  }
-  
-  .matches-column {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 20px;
+    min-width: 220px;
+    padding: 0 10px;
   }
   
-  .bracket-match {
+  .bracket-round h3 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+  }
+  
+  .matches {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .round-16 .matches {
+    gap: 15px;
+  }
+  
+  .quarter-finals .matches {
+    margin-top: 22.5px;
+    gap: 60px;
+  }
+  
+  .semi-finals .matches {
+    margin-top: 75px;
+    gap: 150px;
+  }
+  
+  .final .matches {
+    margin-top: 180px;
+  }
+  
+  .match-box {
     background: white;
     border: 1px solid #dee2e6;
     border-radius: 8px;
-    padding: 1rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: relative;
   }
   
-  .bracket-teams {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  .match-box::after {
+    content: '';
+    position: absolute;
+    right: -11px;
+    top: 50%;
+    width: 10px;
+    height: 2px;
+    background: #dee2e6;
   }
   
-  .bracket-team {
+  .match-box::before {
+    content: '';
+    position: absolute;
+    right: -31px;
+    top: 50%;
+    width: 20px;
+    height: 50%;
+    border-right: 2px solid #dee2e6;
+    border-top: 2px solid #dee2e6;
+  }
+  
+  .final .match-box::after,
+  .final .match-box::before {
+    display: none;
+  }
+  
+  .team {
     display: flex;
     justify-content: space-between;
-    padding: 0.5rem;
-    border: 1px solid #e9ecef;
-    border-radius: 4px;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid #dee2e6;
   }
   
-  .bracket-team.winner {
-    background-color: #d4edda;
-    border-color: #c3e6cb;
+  .team:last-child {
+    border-bottom: none;
   }
   
-  .bracket-team.empty {
-    color: #6c757d;
-    font-style: italic;
+  .team.winner {
+    background-color: #e8f5e9;
+    font-weight: 600;
   }
   
   .team-name {
-    font-weight: 500;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
-  .team-score {
-    min-width: 2rem;
+  .score {
+    margin-left: 10px;
+    min-width: 24px;
     text-align: center;
   }
   
-  .match-score {
-    margin-top: 0.5rem;
-    text-align: center;
-    font-size: 0.875rem;
-    color: #6c757d;
+  .final-match {
+    border: 2px solid #gold;
   }
   
-  .extra-time,
-  .penalties {
-    display: block;
-    font-size: 0.75rem;
-    color: #6c757d;
-  }
-  
-  .bracket-connector {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    padding: 3rem 0;
-  }
-  
-  .connector-line {
-    position: relative;
-    height: 2px;
-    background-color: #dee2e6;
-    width: 2rem;
-  }
-  
-  .connector-line::before,
-  .connector-line::after {
-    content: '';
-    position: absolute;
-    width: 2px;
-    background-color: #dee2e6;
-  }
-  
-  .connector-line::before {
-    top: -1rem;
-    height: 1rem;
-    left: 0;
-  }
-  
-  .connector-line::after {
-    bottom: -1rem;
-    height: 1rem;
-    right: 0;
-  }
-  
-  @media (max-width: 768px) {
-    .bracket-container {
-      flex-direction: column;
-      padding: 1rem;
+  @media (max-width: 1200px) {
+    .bracket {
+      padding: 10px;
     }
   
     .bracket-round {
-      min-width: 100%;
+      min-width: 180px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .bracket {
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
     }
   
-    .bracket-connector {
+    .bracket-round {
+      width: 100%;
+      max-width: 400px;
+    }
+  
+    .matches {
+      gap: 20px !important;
+    }
+  
+    .quarter-finals .matches,
+    .semi-finals .matches,
+    .final .matches {
+      margin-top: 0;
+    }
+  
+    .match-box::after,
+    .match-box::before {
       display: none;
     }
   }
