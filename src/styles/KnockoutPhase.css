@@ -1,0 +1,33 @@
+.knockout-container {
+    padding: 2rem;
+  }
+  
+  .knockout-round {
+    margin-bottom: 3rem;
+  }
+  
+  .knockout-round h3 {
+    margin-bottom: 1.5rem;
+    color: #495057;
+  }
+  
+  .knockout-matches {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .knockout-matches {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    .knockout-matches {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  

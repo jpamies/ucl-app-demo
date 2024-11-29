@@ -1,0 +1,59 @@
+.standings-container {
+    margin-bottom: 2rem;
+  }
+  
+  .standings-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .matches-container {
+    margin-top: 2rem;
+  }
+  
+  .round-group {
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+  }
+  
+  .round-group.completed {
+    background-color: #f8f9fa;
+  }
+  
+  .round-header {
+    padding: 1rem;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  .round-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .round-dates {
+    color: #6c757d;
+    font-size: 0.9rem;
+  }
+  
+  .round-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    min-width: 100px;
+  }
+  
+  .expand-icon {
+    font-size: 0.8rem;
+    color: #6c757d;
+  }
+  
+  .round-matches {
+    padding: 1rem;
+  }
+  

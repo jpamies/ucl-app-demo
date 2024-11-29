@@ -1,0 +1,36 @@
+.knockout-match {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background-color: #fff;
+  }
+  
+  .knockout-team {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+  }
+  
+  .team-name {
+    flex: 1;
+    font-weight: 500;
+  }
+  
+  .knockout-scores {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .knockout-scores input {
+    width: 40px;
+    text-align: center;
+    padding: 0.25rem;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+  }
+  

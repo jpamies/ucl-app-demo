@@ -1,0 +1,47 @@
+.standings-container {
+    overflow-x: auto;
+    margin: 2rem 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+  }
+  
+  .standings-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+  }
+  
+  .standings-table th,
+  .standings-table td {
+    padding: 0.75rem;
+    text-align: center;
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  .standings-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+  }
+  
+  .team-column {
+    text-align: left !important;
+    min-width: 200px;
+  }
+  
+  .points-column {
+    font-weight: 600;
+  }
+  
+  .qualification-zone {
+    background-color: #d4edda;
+  }
+  
+  .knockout-playoff-zone {
+    background-color: #fff3cd;
+  }
+  
+  .standings-table tr:hover {
+    background-color: #f8f9fa;
+  }
+  
