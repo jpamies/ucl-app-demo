@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+// src/components/GroupStage/GroupStage.jsx
+import React, { useState, useEffect, useMemo } from 'react';
 import Standings from '../Standings/Standings';
 import Round from '../Round/Round';
 import './GroupStage.css';
 
-function GroupStage() {
+function GroupStage({ onStandingsUpdate }) {
   const [matches, setMatches] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -106,13 +107,15 @@ function GroupStage() {
     });
   };
 
-  const calculateStandings = () => {
+  const standings = useMemo(() => {
     const teamsMap = new Map();
 
     matches.forEach(match => {
       if (!teamsMap.has(match.HomeTeam)) {
         teamsMap.set(match.HomeTeam, {
           name: match.HomeTeam,
+          group: match.Group || 'A',
+          country: match.HomeTeamCountry || 'Unknown',
           played: 0,
           won: 0,
           drawn: 0,
@@ -125,6 +128,8 @@ function GroupStage() {
       if (!teamsMap.has(match.AwayTeam)) {
         teamsMap.set(match.AwayTeam, {
           name: match.AwayTeam,
+          group: match.Group || 'A',
+          country: match.HomeTeamCountry || 'Unknown',
           played: 0,
           won: 0,
           drawn: 0,
@@ -171,7 +176,13 @@ function GroupStage() {
       if (goalDiffB !== goalDiffA) return goalDiffB - goalDiffA;
       return b.goalsFor - a.goalsFor;
     });
-  };
+  }, [matches]);
+
+  useEffect(() => {
+    if (standings.length > 0) {
+      onStandingsUpdate(standings);
+    }
+  }, [standings, onStandingsUpdate]);
 
   const handleScoreChange = (matchNumber, team, value) => {
     const numValue = parseInt(value);
@@ -240,7 +251,6 @@ function GroupStage() {
   if (isLoading) return <div className="loading">Loading matches...</div>;
   if (error) return <div className="error">Error: {error}</div>;
 
-  const standings = calculateStandings();
   const rounds = Array.from(new Set(matches.map(m => m.RoundNumber))).sort((a, b) => a - b);
 
   return (

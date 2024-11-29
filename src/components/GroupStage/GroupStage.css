@@ -1,12 +1,15 @@
+/* src/components/GroupStage/GroupStage.css */
 .group-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .matches-container {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     padding: 1.5rem;
-  }
-  
-  .matches-container {
-    margin-top: 2rem;
   }
   
   .matches-header {
@@ -33,25 +36,27 @@
     font-family: var(--font-family-base);
     font-weight: 500;
     font-size: 0.875rem;
-    line-height: 1;
-    height: 36px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
   }
   
   .reset-button:hover {
     background-color: #c82333;
-    transform: translateY(-1px);
-  }
-  
-  .reset-button:active {
-    transform: translateY(0);
   }
   
   .matches-list {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    .matches-container {
+      padding: 1rem;
+    }
+  
+    .matches-header {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start;
+    }
   }
   

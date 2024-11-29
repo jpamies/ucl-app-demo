@@ -1,0 +1,129 @@
+/* src/components/KnockoutStage/BracketView.css */
+.bracket-container {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+    overflow-x: auto;
+  }
+  
+  .bracket-round {
+    min-width: 300px;
+  }
+  
+  .round-title {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+    font-size: 1.25rem;
+  }
+  
+  .matches-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .bracket-match {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .bracket-teams {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .bracket-team {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+  }
+  
+  .bracket-team.winner {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+  }
+  
+  .bracket-team.empty {
+    color: #6c757d;
+    font-style: italic;
+  }
+  
+  .team-name {
+    font-weight: 500;
+  }
+  
+  .team-score {
+    min-width: 2rem;
+    text-align: center;
+  }
+  
+  .match-score {
+    margin-top: 0.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: #6c757d;
+  }
+  
+  .extra-time,
+  .penalties {
+    display: block;
+    font-size: 0.75rem;
+    color: #6c757d;
+  }
+  
+  .bracket-connector {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 3rem 0;
+  }
+  
+  .connector-line {
+    position: relative;
+    height: 2px;
+    background-color: #dee2e6;
+    width: 2rem;
+  }
+  
+  .connector-line::before,
+  .connector-line::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    background-color: #dee2e6;
+  }
+  
+  .connector-line::before {
+    top: -1rem;
+    height: 1rem;
+    left: 0;
+  }
+  
+  .connector-line::after {
+    bottom: -1rem;
+    height: 1rem;
+    right: 0;
+  }
+  
+  @media (max-width: 768px) {
+    .bracket-container {
+      flex-direction: column;
+      padding: 1rem;
+    }
+  
+    .bracket-round {
+      min-width: 100%;
+    }
+  
+    .bracket-connector {
+      display: none;
+    }
+  }
+  

@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+// src/App.jsx
+import React, { useState, useCallback } from 'react';
 import GroupStage from './components/GroupStage/GroupStage';
+import KnockoutStage from './components/KnockoutStage/KnockoutStage';
 import './styles/main.css';
 
 function App() {
   const [activeTab, setActiveTab] = useState('group');
+  const [standings, setStandings] = useState([]);
+
+  const handleStandingsUpdate = useCallback((newStandings) => {
+    setStandings(newStandings);
+  }, []);
 
   return (
     <div className="app">
@@ -26,12 +33,9 @@ function App() {
 
       <div className="tab-content">
         {activeTab === 'group' ? (
-          <GroupStage />
+          <GroupStage onStandingsUpdate={handleStandingsUpdate} />
         ) : (
-          <div className="knockout-phase">
-            <h2>Knockout Phase</h2>
-            <p>Coming soon...</p>
-          </div>
+          <KnockoutStage standings={standings} />
         )}
       </div>
     </div>

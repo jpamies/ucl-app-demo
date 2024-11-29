@@ -1,0 +1,60 @@
+/* components/KnockoutStage/KnockoutStage.css */
+.knockout-stage {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+  }
+  
+  .playoff-round,
+  .round-16 {
+    flex: 1;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .match-card {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .team-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+  }
+  
+  .team-name {
+    font-weight: 500;
+  }
+  
+  .team-rank {
+    color: #6c757d;
+    font-size: 0.875rem;
+  }
+  
+  .score-input {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+  
+  .score-input input {
+    width: 40px;
+    text-align: center;
+    padding: 0.25rem;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+  }
+  
+  .winner {
+    background-color: #d4edda;
+  }
+  
